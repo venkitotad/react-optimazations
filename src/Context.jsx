@@ -1,3 +1,11 @@
-import { createContext, useState, useEffect, useCallback, useMemo } from "react";
+import React from 'react'
 
-const DashboardContext = createContext)
+const Context = () => {
+  return (
+    <div>
+      
+    </div>
+  )
+}
+
+export default Context
