@@ -1,27 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "./context/UserContext";
+import { ThemeContext } from "./context/ThemeContext";
 
 export default function App() {
-  const [user, setUser] = useState({
-    name: "Venki",
-    role: "Student",
-    notifications: 3,
-  });
-
-  const [theme, setTheme] = useState("light");
   const [counter, setCounter] = useState(0);
 
+  const { theme } = useContext(ThemeContext);
+
   console.log("App rendered");
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
-  const increaseNotifications = () => {
-    setUser({
-      ...user,
-      notifications: user.notifications + 1,
-    });
-  };
 
   return (
     <div
@@ -39,60 +25,40 @@ export default function App() {
         Counter: {counter}
       </button>
 
-      <button onClick={toggleTheme} style={{ marginLeft: 10 }}>
-        Toggle Theme
-      </button>
-
-      <button
-        onClick={increaseNotifications}
-        style={{ marginLeft: 10 }}
-      >
-        Add Notification
-      </button>
-
-      <Dashboard
-        user={user}
-        theme={theme}
-        increaseNotifications={increaseNotifications}
-      />
+      <Dashboard />
     </div>
   );
 }
 
-function Dashboard({ user, theme, increaseNotifications }) {
+const Dashboard = React.memo(function Dashboard() {
   console.log("Dashboard rendered");
 
   return (
     <div style={box}>
       <h2>Dashboard</h2>
 
-      <Sidebar
-        user={user}
-        theme={theme}
-        increaseNotifications={increaseNotifications}
-      />
+      <Sidebar />
     </div>
   );
-}
+})
 
-function Sidebar({ user, theme, increaseNotifications }) {
+const Sidebar = React.memo(function Sidebar() {
   console.log("Sidebar rendered");
 
   return (
     <div style={box}>
       <h3>Sidebar</h3>
 
-      <Profile
-        user={user}
-        theme={theme}
-        increaseNotifications={increaseNotifications}
-      />
+      <Profile />
     </div>
   );
-}
+})
 
-function Profile({ user, theme, increaseNotifications }) {
+const Profile = React.memo(function Profile() {
   console.log("Profile rendered");
+
+  const { user, increaseNotifications } = useContext(UserContext);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
     <div style={box}>
@@ -103,12 +69,12 @@ function Profile({ user, theme, increaseNotifications }) {
       <p>Theme: {theme}</p>
       <p>Notifications: {user.notifications}</p>
 
-      <button onClick={increaseNotifications}>
-        Increase Notifications
-      </button>
+      <button onClick={increaseNotifications}>Increase Notifications</button>
+      <br />
+      <button onClick={toggleTheme}>Toggle Theme</button>
     </div>
   );
-}
+})
 
 const box = {
   border: "1px solid gray",
